@@ -1,0 +1,6 @@
+build
+cmake-build-*
+sdkconfig.old
+sdkconfig
+data/config.json
+managed_components

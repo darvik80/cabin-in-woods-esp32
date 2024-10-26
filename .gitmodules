@@ -1,0 +1,3 @@
+[submodule "libs/darvik"]
+	path = libs/darvik
+	url = git@github.com:darvik80/esp-idf-components.git
