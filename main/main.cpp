@@ -59,11 +59,11 @@ protected:
         });
 
         getRegistry().create<TelemetryService>();
-        auto& led1 = getRegistry().create<LedStripService<Service_App_LedStrip1, 40, 16>>();
-        led1.setColor(0, 15, LedColor{255, 255, 0});
-        led1.refresh();
+        auto& bakeLed = getRegistry().create<LedStripService<Service_App_LedBake, 40, 16>>();
+        bakeLed.setColor(0, 15, LedColor{255, 255, 0});
+        bakeLed.refresh();
 
-        FreeRTOSTask::execute([&led1, bake_player]()
+        FreeRTOSTask::execute([&bakeLed, bake_player]()
         {
             mp3_player_volume(bake_player, 29);
             mp3_player_play(bake_player, 1);
@@ -72,17 +72,13 @@ protected:
                 for (int idx = 0; idx < 16; idx++)
                 {
                     uint8_t r = ((uint64_t)256 * esp_random() >> 32);
-                    led1.setColor(idx, idx, LedColor{r, r, 0});
+                    bakeLed.setColor(idx, idx, LedColor{r, r, 0});
                 }
-                led1.refresh();
+                bakeLed.refresh();
                  if (gpio_get_level(GPIO_NUM_39) == 0)
                  {
-                     esp_logi(app, "refresh: %d", gpio_get_level(GPIO_NUM_39));
                      mp3_player_play(bake_player, 1);
                      vTaskDelay(pdMS_TO_TICKS(50));
-                     // gpio_set_level(GPIO_NUM_39, 1);
-                     // vTaskDelay(pdMS_TO_TICKS(50));
-                     // gpio_set_level(GPIO_NUM_39, 0);
                  }
                  else
                 {

@@ -6,8 +6,7 @@
 #define CONFIG_H
 
 enum AppServiceId {
-  Service_App_LedStrip1,
-  Service_App_LedStrip2,
+  Service_App_LedBake,
   Service_App_ServoDoor,
 };
 
