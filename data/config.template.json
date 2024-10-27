@@ -1,0 +1,32 @@
+{
+  "wifi": [
+    {
+      "ssid": "ssid1",
+      "password": "pass1"
+    },
+    {
+      "ssid": "ssid2",
+      "password": "pass2"
+    }
+  ],
+  "mqtt": [
+    {
+      "type": "alicloud",
+      "product-name": "${productName}",
+      "device-name": "${deviceName}",
+      "device-secret": "${deviceSecret}"
+    },
+    {
+      "type": "local",
+      "uri": "mqtt://media-vn.local",
+      "username": "${userName}",
+      "password": "${userPass}}",
+      "product-name": "${prodcutName}",
+      "device-name": "${deviceName}"
+    }
+  ],
+  "gamepad": {
+    "type": "ble",
+    "bda": "03:21:91:57:16:c1"
+  }
+}
