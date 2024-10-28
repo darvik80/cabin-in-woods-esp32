@@ -18,8 +18,6 @@ extern "C" {
 
 #include "led/LedStripService.h"
 
-#include <esp_log.h>
-
 class Cabin : public Application<Cabin>
 {
 public:
@@ -59,7 +57,7 @@ protected:
         });
 
         getRegistry().create<TelemetryService>();
-        auto& bakeLed = getRegistry().create<LedStripService<Service_App_LedBake, 40, 16>>();
+        auto& bakeLed = getRegistry().create<LedStripService<Service_App_LedBake, GPIO_NUM_40, 16>>();
         bakeLed.setColor(0, 15, LedColor{255, 255, 0});
         bakeLed.refresh();
 

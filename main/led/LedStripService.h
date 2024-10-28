@@ -22,30 +22,34 @@ public:
     virtual void setColor(size_t start, size_t end, uint32_t red, uint32_t green, uint32_t blue) = 0;
 
     virtual void refresh() = 0;
+
+    virtual ~LedStrip() = default;
 };
 
-template<ServiceSubId id, int pin = 8, uint16_t numOfPins = 1>
-class LedStripService : public TService<LedStripService<id, pin, numOfPins>,  id, Sys_User>, public LedStrip {
+template<ServiceSubId id, gpio_num_t pin = GPIO_NUM_8, uint16_t numOfPins = 1>
+class LedStripService : public TService<LedStripService<id, pin, numOfPins>, id, Sys_User>, public LedStrip {
     led_strip_handle_t _ledStrip{};
+
 public:
-    explicit LedStripService(Registry &registry) : TService<LedStripService<id, pin, numOfPins>, id, Sys_User>(registry) {
+    explicit LedStripService(Registry &registry) : TService<LedStripService, id, Sys_User>(registry) {
         led_strip_config_t strip_config = {
-                .strip_gpio_num = pin,   // The GPIO that connected to the LED strip's data line
-                .max_leds = numOfPins,        // The number of LEDs in the strip,
-                //.led_pixel_format = LED_PIXEL_FORMAT_GRB, // Pixel format of your LED strip
-                .led_model = LED_MODEL_WS2812,            // LED strip model
-                .flags {
-                        .invert_out = false,                // whether to invert the output signal
-                }
+            .strip_gpio_num = pin, // The GPIO that connected to the LED strip's data line
+            .max_leds = numOfPins, // The number of LEDs in the strip,
+            .led_model = LED_MODEL_WS2812, // LED strip model
+            .color_component_format = LED_STRIP_COLOR_COMPONENT_FMT_GRB,
+            //.led_pixel_format = LED_PIXEL_FORMAT_GRB, // Pixel format of your LED strip
+            .flags{
+                .invert_out = false, // whether to invert the output signal
+            }
         };
 
         led_strip_rmt_config_t rmt_config = {
-                .clk_src = RMT_CLK_SRC_DEFAULT,        // different clock source can lead to different power consumption
-                .resolution_hz = LED_STRIP_RMT_RES_HZ, // RMT counter clock frequency
-                .mem_block_symbols = 0,
-                .flags {
-                        .with_dma = false,               // DMA feature is available on ESP target like ESP32-S3
-                }
+            .clk_src = RMT_CLK_SRC_DEFAULT, // different clock source can lead to different power consumption
+            .resolution_hz = LED_STRIP_RMT_RES_HZ, // RMT counter clock frequency
+            .mem_block_symbols = 0,
+            .flags{
+                .with_dma = false, // DMA feature is available on ESP target like ESP32-S3
+            }
         };
 
         ESP_ERROR_CHECK(led_strip_new_rmt_device(&strip_config, &rmt_config, &_ledStrip));
@@ -56,26 +60,26 @@ public:
         return "led";
     }
 
-    uint16_t getNumOfPins() {
+    uint16_t getNumOfPins() override {
         return numOfPins;
     }
 
-    void setColor(size_t start, size_t end, const LedColor &color) {
+    void setColor(size_t start, size_t end, const LedColor &color) override {
         setColor(start, end, color.red, color.green, color.blue);
     }
 
-    void setColor(size_t start, size_t end, uint32_t red, uint32_t green, uint32_t blue) {
+    void setColor(size_t start, size_t end, uint32_t red, uint32_t green, uint32_t blue) override {
         for (size_t idx = start; idx <= end; idx++) {
             ESP_ERROR_CHECK(led_strip_set_pixel(_ledStrip, idx, red, green, blue));
         }
     }
 
-    void refresh() {
+    void refresh() override {
         ESP_ERROR_CHECK(led_strip_refresh(_ledStrip));
     }
 
 
-    ~LedStripService()  {
+    ~LedStripService() override {
         led_strip_del(_ledStrip);
     }
 };
