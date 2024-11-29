@@ -2,13 +2,11 @@ dependencies:
   espressif/fmt:
     component_hash: 05c74b1a3769a20be6fdaccab7e99af8d86bd7fbb2f1fd0a256b165de0f73e88
     source:
-      service_url: https://api.components.espressif.com/
       type: service
     version: 10.1.0~1
   espressif/led_strip:
     component_hash: f907c58f722c58ab8545366668cfd8769cefb7d97a631a14e9d16234cc72bdff
     source:
-      service_url: https://api.components.espressif.com/
       type: service
     version: 3.0.0
   idf:
@@ -16,6 +14,6 @@ dependencies:
     source:
       type: idf
     version: 5.3.0
-manifest_hash: 9b5a29ecab578a6849fca7471a928fda4a585e8d75856b8e9031dee422dd8ba9
+manifest_hash: 7b4afb69c7e6fab9a8c191bb5f79cd50b47945844f5e86ded2331c95c969b964
 target: esp32s3
 version: 1.0.0

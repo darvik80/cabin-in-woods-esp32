@@ -60,6 +60,7 @@ protected:
         bakeLed.refresh();
 
         FreeRTOSTask::execute([&bakeLed, bake_player]() {
+            mp3_player_reset(bake_player);
             mp3_player_volume(bake_player, 29);
             mp3_player_play(bake_player, 1);
             while (true) {
@@ -78,6 +79,8 @@ protected:
         }, "bake-task", 4096);
 
         FreeRTOSTask::execute([&door, door_player] {
+            //xmp3_player_reset(door_player);
+            mp3_player_volume(door_player, 10);
             door.move(90);
             while (true) {
                 mp3_player_play(door_player, 3);
